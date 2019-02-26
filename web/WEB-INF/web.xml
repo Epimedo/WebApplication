@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+
+    <filter>
+        <filter-name>order</filter-name>
+        <filter-class>by.epam.halavin.maintask.controller.filter.OrderPageFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>order</filter-name>
+        <url-pattern>/order</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>index</filter-name>
+        <filter-class>by.epam.halavin.maintask.controller.filter.IndexPageFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>index</filter-name>
+        <url-pattern>/main</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>admin</filter-name>
+        <filter-class>by.epam.halavin.maintask.controller.filter.AdminPageFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>admin</filter-name>
+        <url-pattern>/admin</url-pattern>
+    </filter-mapping>
+
+    <servlet-mapping>
+        <servlet-name>index</servlet-name>
+        <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>index</servlet-name>
+        <servlet-class>by.epam.halavin.maintask.controller.IndexPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>order</servlet-name>
+        <url-pattern>/order</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>order</servlet-name>
+        <servlet-class>by.epam.halavin.maintask.controller.OrderPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>driver</servlet-name>
+        <url-pattern>/driver</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>driver</servlet-name>
+        <servlet-class>by.epam.halavin.maintask.controller.DriverPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>admin</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>admin</servlet-name>
+        <servlet-class>by.epam.halavin.maintask.controller.AdminPageServlet</servlet-class>
+    </servlet>
+</web-app>
