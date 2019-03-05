@@ -7,6 +7,7 @@ import by.epam.halavin.maintask.controller.info.Urls;
 import by.epam.halavin.maintask.service.bridge.DispatcherBridge;
 import by.epam.halavin.maintask.service.order.DefaultOrderDispatcher;
 import by.epam.halavin.maintask.service.ServiceFactory;
+import by.epam.halavin.maintask.service.order.OrderDispatcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class Refresh implements Command {
         ServiceFactory factory = ServiceFactory.getInstance();
         DispatcherBridge bridge = factory.createDispatcherBrigde();
 
-        DefaultOrderDispatcher orderDispatcher = bridge
+        OrderDispatcher orderDispatcher = bridge
                 .getOrderDispatcher((Passenger) session.getAttribute(Attributes.ACCOUNT.getName()));
 
         if (!orderDispatcher.getOrderStatus().equals(session.getAttribute(Attributes.ORDER_STATUS.getName()))) {

@@ -9,6 +9,7 @@ import by.epam.halavin.maintask.service.bridge.DispatcherBridge;
 import by.epam.halavin.maintask.service.order.DefaultOrderDispatcher;
 import by.epam.halavin.maintask.service.ServiceFactory;
 import by.epam.halavin.maintask.service.exception.ServiceException;
+import by.epam.halavin.maintask.service.order.OrderDispatcher;
 import by.epam.halavin.maintask.service.validate.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +29,7 @@ public class DriverSearch implements Command {
         ServiceFactory factory = ServiceFactory.getInstance();
         DispatcherBridge dispatcherBridge = factory.createDispatcherBrigde();
         Validator validator = factory.getUserValidator(AccountTypes.PASSENGER.toString());
-        DefaultOrderDispatcher orderDispatcher = dispatcherBridge.
+        OrderDispatcher orderDispatcher = dispatcherBridge.
                 getOrderDispatcher((Passenger) session.getAttribute(Attributes.ACCOUNT.getName()));
 
         try {

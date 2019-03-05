@@ -8,6 +8,7 @@ import by.epam.halavin.maintask.service.bridge.DispatcherBridge;
 import by.epam.halavin.maintask.service.order.DefaultOrderDispatcher;
 import by.epam.halavin.maintask.service.ServiceFactory;
 import by.epam.halavin.maintask.service.exception.ServiceException;
+import by.epam.halavin.maintask.service.order.OrderDispatcher;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +27,7 @@ public class Paid implements Command {
         ServiceFactory factory = ServiceFactory.getInstance();
         DispatcherBridge bridge = factory.createDispatcherBrigde();
 
-        DefaultOrderDispatcher orderDispatcher = bridge
+        OrderDispatcher orderDispatcher = bridge
                 .driverCheck((Driver) session.getAttribute(Attributes.ACCOUNT.getName()));
 
         try {
