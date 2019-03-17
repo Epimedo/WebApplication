@@ -62,9 +62,26 @@
     <fmt:message bundle="${loc}" key="local.userEmail" var="userEmail"/>
     <fmt:message bundle="${loc}" key="local.userPhone" var="userPhone"/>
     <fmt:message bundle="${loc}" key="local.userCheckupend" var="userCheckupEnd"/>
+    <fmt:message bundle="${loc}" key="local.userTable" var="userTable"/>
+    <fmt:message bundle="${loc}" key="local.driverTable" var="driverTable"/>
+    <fmt:message bundle="${loc}" key="local.registration" var="registration"/>
 </head>
 
 <body id="page-top">
+<c:if test="${sessionScope.focusTable=='driverTable'}">
+    <script>
+        window.onload = function () {
+            window.location = "#driverTable";
+        }
+    </script>
+</c:if>
+<c:if test="${sessionScope.focusTable=='userTable'}">
+    <script>
+        window.onload = function () {
+            window.location = "#userTable";
+        }
+    </script>
+</c:if>
 <script>
     if (typeof window.history.pushState == 'function') {
         window.history.pushState({}, "Hide", "http:/Taxi/admin");
@@ -112,13 +129,66 @@
         <p class="lead"></p>
     </div>
 </header>
+<c:choose>
+    <c:when test="${sessionScope.responseStatus=='existingEmail'}">
+        <c:set var="statusMessage" value="${emailError}"/>
+    </c:when>
+    <c:when test="${sessionScope.responseStatus=='existingPhone'}">
+        <c:set var="statusMessage" value="${telError}"/>
+    </c:when>
+    <c:when test="${sessionScope.responseStatus=='successSigned'}">
+        <c:set var="statusMessage" value="${signedSuccess}"/>
+    </c:when>
+    <c:when test="${sessionScope.responseStatus=='success'}">
+        <c:set var="statusMessage" value="${registration}"/>
+    </c:when>
+    <c:when test="${sessionScope.responseStatus=='existingCarNumber'}">
+        <c:set var="statusMessage" value="${existingCarNumber}"/>
+    </c:when>
+    <c:when test="${sessionScope.responseStatus=='secPassIncorrect'}">
+        <c:set var="statusMessage" value="${secPassIncorrect}"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="statusMessage" value="${null}"/>
+    </c:otherwise>
+</c:choose>
+<c:if test="${sessionScope.responseStatus!=null}">
+    <div id="signedSuccess" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-dark text-center">
+                    <h4 class="modal-title">${statusMessage}</h4>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" type="button" data-dismiss="modal">
+                        <c:out value="${close}"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <c:if test="${statusMessage!=null}">
+        <script type="text/javascript">
+            window.onload = function () {
+                $('#signedSuccess').modal('show');
+                window.location = "#driverTable";
+            };
 
-<section id="order" class="bg-light"
+        </script>
+    </c:if>
+</c:if>
+<section id="userTable" class="bg-light"
          style="background: url('https://www.goalcast.com/wp-content/uploads/2017/11/road-trip-2.jpg') no-repeat center center fixed">
     <div class="container">
         <div class="row text-center">
             <div class="container">
-                <table class="table table-bordered bg-white" style="border-radius: 25px; border: hidden;">
+                <h2 class="text-light"><c:out value="${userTable}"/></h2>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="container">
+                <table class="table table-bordered bg-white"
+                       style="border-radius: 25px; border: hidden;">
                     <thead>
                     <tr>
                         <th>№</th>
@@ -156,7 +226,63 @@
                                 <c:out value="${passenger.discount}"/>%
                             </td>
                             <td>
-
+                                <div class="container">
+                                    <button class="btn btn-success btn-sm" type="button" data-toggle="modal"
+                                            data-target="#${passenger.id}">
+                                        Edit
+                                    </button>
+                                    <div id="${passenger.id}" class="modal fade">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title"><c:out value="${editAc}"/></h4>
+                                                    <button class="close" type="button" data-dismiss="modal">×</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="post" action="/Taxi/admin">
+                                                        <div class="form-group">
+                                                            <label><c:out value="${statusInfo}"/></label>
+                                                            <select name="status" class="form-control">
+                                                                <option value="ban">Ban</option>
+                                                                <option value="unban">Unban</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label><c:out value="${bonus}"/></label>
+                                                            <br>
+                                                            <label><c:out value="${bonusInfo}"/></label>
+                                                            <input pattern="[1-9][0-9]{0,3}(\.[0-9]{0,2})?"
+                                                                   name="bonus" class="form-control"
+                                                                   placeholder="${enterBon}"
+                                                                   required autofocus>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label><c:out value="${passenger.id}"/></label>
+                                                            <label><c:out value="${discount}"/></label>
+                                                            <br>
+                                                            <label><c:out value="${discountInfo}"/></label>
+                                                            <input name="discount"
+                                                                   pattern="[1-9][0-9]{0,3}(\.[0-9]{1,2})?"
+                                                                   class="form-control"
+                                                                   placeholder="${enterDis}"
+                                                                   required autofocus>
+                                                        </div>
+                                                        <input type="hidden" name="id" value="${passenger.id}">
+                                                        <input type="hidden" name="command" value="EDIT_PASSENGER">
+                                                        <button class="btn btn-dark btn-block" type="submit">
+                                                            <c:out value="${edit}"/>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-default" type="button" data-dismiss="modal">
+                                                        <c:out value="${close}"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </c:forEach>
@@ -185,66 +311,7 @@
                         </form>
                     </div>
                     <div class="col-sm">
-                        <div class="container">
-                            <button class="btn btn-success btn-sm" type="button" data-toggle="modal"
-                                    data-target="#passengerEditor">
-                                Edit
-                            </button>
-                            <div id="passengerEditor" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title"><c:out value="${editAc}"/></h4>
-                                            <button class="close" type="button" data-dismiss="modal">×</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" action="/Taxi/admin">
-                                                <div class="form-group">
-                                                    <input class="form-control" pattern="\d{1,10}"
-                                                           name="id"
-                                                           placeholder="№ id" required autofocus>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><c:out value="${statusInfo}"/></label>
-                                                    <select name="status" class="form-control">
-                                                        <option value="ban">Ban</option>
-                                                        <option value="unban">Unban</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><c:out value="${bonus}"/></label>
-                                                    <br>
-                                                    <label><c:out value="${bonusInfo}"/></label>
-                                                    <input pattern="[1-9][0-9]{0,3}(\.[0-9]{0,2})?"
-                                                           name="bonus" class="form-control"
-                                                           placeholder="${enterBon}"
-                                                           required autofocus>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><c:out value="${passenger.id}"/></label>
-                                                    <label><c:out value="${discount}"/></label>
-                                                    <br>
-                                                    <label><c:out value="${discountInfo}"/></label>
-                                                    <input name="discount" pattern="[1-9][0-9]{0,3}(\.[0-9]{1,2})?"
-                                                           class="form-control"
-                                                           placeholder="${enterDis}"
-                                                           required autofocus>
-                                                </div>
-                                                <input type="hidden" name="command" value="EDIT_PASSENGER">
-                                                <button class="btn btn-dark btn-block" type="submit">
-                                                    <c:out value="${edit}"/>
-                                                </button>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-default" type="button" data-dismiss="modal">
-                                                <c:out value="${close}"/>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -257,7 +324,13 @@
     <div class="container">
         <div class="row text-center">
             <div class="container">
-                <table class="table table-bordered bg-white" style="border-radius: 25px; border: hidden;">
+                <h2 class="text-light"><c:out value="${driverTable}"/></h2>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="container">
+                <table id="driverTable" class="table table-bordered bg-white"
+                       style="border-radius: 25px; border: hidden;">
                     <thead>
                     <tr>
                         <th>№</th>
@@ -288,7 +361,42 @@
                                 <c:out value="${driver.carNumber}"/>
                             </td>
                             <td>
-
+                                <div class="container">
+                                    <button class="btn btn-success btn-sm" type="button" data-toggle="modal"
+                                            data-target="#${driver.id}">
+                                        Edit
+                                    </button>
+                                    <div id="${driver.id}" class="modal fade">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title"><c:out value="${editAc}"/></h4>
+                                                    <button class="close" type="button" data-dismiss="modal">×</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="post" action="/Taxi/admin">
+                                                        <div class="form-group">
+                                                            <select name="status" class="form-control">
+                                                                <option value="ban">Ban</option>
+                                                                <option value="unban">Unban</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="hidden" name="id" value="${driver.id}">
+                                                        <input type="hidden" name="command" value="EDIT_DRIVER">
+                                                        <button class="btn btn-dark btn-block" type="submit">
+                                                            <c:out value="${edit}"/>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-default" type="button" data-dismiss="modal">
+                                                        <c:out value="${close}"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </c:forEach>
@@ -435,46 +543,7 @@
                         </div>
                     </div>
                     <div class="col-sm">
-                        <div class="container">
-                            <button class="btn btn-success btn-sm" type="button" data-toggle="modal"
-                                    data-target="#driverEditor">
-                                Edit
-                            </button>
-                            <div id="driverEditor" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title"><c:out value="${editAc}"/></h4>
-                                            <button class="close" type="button" data-dismiss="modal">×</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" action="/Taxi/admin">
-                                                <div class="form-group">
-                                                    <input pattern="\d{1,10}" class="form-control" name="id"
-                                                           placeholder="№ id" required
-                                                           autofocus>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select name="status" class="form-control">
-                                                        <option value="ban">Ban</option>
-                                                        <option value="unban">Unban</option>
-                                                    </select>
-                                                </div>
-                                                <input type="hidden" name="command" value="EDIT_DRIVER">
-                                                <button class="btn btn-dark btn-block" type="submit">
-                                                    <c:out value="${edit}"/>
-                                                </button>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-default" type="button" data-dismiss="modal">
-                                                <c:out value="${close}"/>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

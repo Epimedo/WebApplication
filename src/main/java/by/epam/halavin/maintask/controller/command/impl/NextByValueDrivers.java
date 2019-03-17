@@ -4,8 +4,8 @@ import by.epam.halavin.maintask.controller.command.Command;
 import by.epam.halavin.maintask.controller.info.Attributes;
 import by.epam.halavin.maintask.controller.info.Urls;
 import by.epam.halavin.maintask.service.ServiceFactory;
-import by.epam.halavin.maintask.service.library.UserLibrary;
 import by.epam.halavin.maintask.service.exception.ServiceException;
+import by.epam.halavin.maintask.service.library.UserLibrary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,6 +35,7 @@ public class NextByValueDrivers implements Command {
             session.setAttribute(Attributes.DRIVERS.getName(), driLibrary.getUserIndexOf(start,
                     start + COUNT - 1));
             session.setAttribute(Attributes.CUR_DRIVER_POSITION.getName(), start);
+            session.setAttribute(Attributes.FOCUS_TABLE.getName(), Attributes.DRIVER_TABLE.getName());
         } catch (ServiceException e) {
             log.error(e.getMessage());
         }

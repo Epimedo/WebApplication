@@ -25,7 +25,12 @@ public class SignOut implements Command {
         Iterator<String> iterator = session.getAttributeNames().asIterator();
 
         while (iterator.hasNext()) {
-            session.setAttribute(iterator.next(), null);
+            String name = iterator.next();
+            if (name.equals(Attributes.LOCAL.getName())) {
+                continue;
+            } else {
+                session.setAttribute(name, null);
+            }
         }
 
         String url = CreatorFullURL.create(request);

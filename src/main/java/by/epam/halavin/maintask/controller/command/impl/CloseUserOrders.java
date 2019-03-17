@@ -29,6 +29,7 @@ public class CloseUserOrders implements Command {
 
         User user = (User) session.getAttribute(Attributes.ACCOUNT.getName());
         session.setAttribute(Attributes.ORDERS.getName(), null);
+        session.setAttribute(Attributes.FOCUS_TABLE.getName(), null);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(page);
         requestDispatcher.forward(request, response);

@@ -14,8 +14,10 @@ public enum Attributes {
     ACCEPT("accept"), ON_WAY("onWay"), RESET("reset"), DECLINE("decline"),
     NEXT_POSITION("nextPosition"), SECOND_PASSWORD("secondPassword"), ACCOUNT_STATUS("accountStatus"),
     SIGNED_PASSENGER("signedPassenger"), PREV_REQUEST("prev_request"), ORDERS("orders"), ID("id"),
-    STATUS("status"), DISCOUNT("discount"), BONUS("bonus"),CUR_PASS_POSITION("currentPassPos"),
-    CUR_DRIVER_POSITION("currentDriverPos");
+    STATUS("status"), DISCOUNT("discount"), BONUS("bonus"), CUR_PASS_POSITION("currentPassPos"),
+    CUR_DRIVER_POSITION("currentDriverPos"), ORDER_BLOCKS("orderBlocks"), FOCUS_TABLE("focusTable"),
+    DRIVER_TABLE("driverTable"), USER_TABLE("userTable"),ORDER_TABLE("orderTable"),CAR("car"),
+    CAR_NUMBER("carNumber"),CHECKUP_END("checkupEnd"),SUCCESS_SIGNED("successSigned");
 
     private String name;
 

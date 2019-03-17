@@ -20,6 +20,7 @@ import java.io.IOException;
 public class GetUserOrders implements Command {
     public static final Logger log = LogManager.getLogger(GetUserOrders.class);
     private final int START_INDEX = 1;
+    private final int END_INDEX = 5;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,7 +34,10 @@ public class GetUserOrders implements Command {
             User user = (User) session.getAttribute(Attributes.ACCOUNT.getName());
             int size = orderLibrary.orderCount(user.getId());
             session.setAttribute(Attributes.ORDERS.getName(),
-                    orderLibrary.getUserOrdersIndexOf(user.getId(), START_INDEX, size));
+                    orderLibrary.getUserOrdersIndexOf(user.getId(), START_INDEX, END_INDEX));
+            session.setAttribute(Attributes.ORDER_BLOCKS.getName(),
+                    orderLibrary.getUserBlocks(user.getId()));
+            session.setAttribute(Attributes.FOCUS_TABLE.getName(), Attributes.ORDER_TABLE.getName());
         } catch (ServiceException e) {
             log.error(e.getMessage());
         }

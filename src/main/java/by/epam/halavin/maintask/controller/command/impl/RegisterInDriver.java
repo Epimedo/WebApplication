@@ -14,7 +14,6 @@ import by.epam.halavin.maintask.util.creators.UserCreator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +22,7 @@ import java.io.IOException;
 
 public class RegisterInDriver implements Command {
     public static final Logger log = LogManager.getLogger(RegisterInDriver.class);
+    private final String addUrl = "?command=INIT_ADMIN";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
@@ -34,13 +34,14 @@ public class RegisterInDriver implements Command {
         UserService service = factory.getUserService(request.getParameter(Attributes.ACCOUNT_TYPE.getName()));
         Validator validator = factory.getUserValidator(request.getParameter(Attributes.ACCOUNT_TYPE.getName()));
 
-        String page = Urls.ADMIN.getName() + "?command=INIT_ADMIN";
+        String page = Urls.ADMIN.getName() + addUrl;
         String status = "";
 
 
         try {
             User user = userCreator.create(request);
             status = validator.registrationCheck(user, request.getParameter(Attributes.SECOND_PASSWORD.getName()));
+            
             if (status.equals("")) {
                 if (service.registration(user)) {
                     session.setAttribute(Attributes.RESPONSE_STATUS.getName(),
@@ -51,10 +52,10 @@ public class RegisterInDriver implements Command {
                         status);
             }
         } catch (ServiceException | UtilException e) {
-            log.error(e.getStackTrace());
+            log.error(e);
+            e.printStackTrace();
         }
 
-        System.out.println(status);
         response.sendRedirect(page);
     }
 }

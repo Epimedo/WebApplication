@@ -4,6 +4,7 @@ import by.epam.halavin.maintask.bean.user.User;
 import by.epam.halavin.maintask.dao.connection.ConnectionPool;
 import by.epam.halavin.maintask.dao.dataconverter.UserConverter;
 import by.epam.halavin.maintask.dao.exception.DAOException;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class AdminConverterTest {
         expected.setName("Боб");
         expected.setSurname("Грошин");
         expected.setTel("+375 44 909 101 11");
-        expected.setPassword("www111");
+        expected.setPassword(DigestUtils.sha256Hex("www111"));
         expected.setEmail("admin1@gmail.com");
     }
 

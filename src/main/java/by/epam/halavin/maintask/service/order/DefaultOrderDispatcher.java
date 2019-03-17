@@ -6,10 +6,11 @@ import by.epam.halavin.maintask.bean.user.Driver;
 import by.epam.halavin.maintask.bean.user.Passenger;
 import by.epam.halavin.maintask.controller.info.Attributes;
 import by.epam.halavin.maintask.dao.DAOFactory;
-import by.epam.halavin.maintask.dao.order.OrderDAO;
-import by.epam.halavin.maintask.dao.user.UserDAO;
 import by.epam.halavin.maintask.dao.exception.DAOException;
+import by.epam.halavin.maintask.dao.order.OrderDAO;
 import by.epam.halavin.maintask.dao.repository.DriverRepository;
+import by.epam.halavin.maintask.dao.street.StreetDAO;
+import by.epam.halavin.maintask.dao.user.UserDAO;
 import by.epam.halavin.maintask.service.bridge.DispatcherBridge;
 import by.epam.halavin.maintask.service.bridge.SimpleDispatcherBridge;
 import by.epam.halavin.maintask.service.exception.ServiceException;
@@ -156,6 +157,7 @@ public class DefaultOrderDispatcher implements OrderDispatcher {
         UserDAO userDAO = factory.getPassDAO();
         DriverRepository driverRepository = factory.getDriverRepository();
         DispatcherBridge bridge = new SimpleDispatcherBridge();
+        StreetDAO streetDAO = factory.getStreetDAO();
 
         try {
             orderDAO.saveOrder(order);
@@ -163,6 +165,12 @@ public class DefaultOrderDispatcher implements OrderDispatcher {
             double cost = (double) Math.round((passenger.getBonus() + (order.getCost() * PROCENT)) * 100d)
                     / 100d;
 
+            if (streetDAO.getStreet(order.getDeparturePoint().trim()).equals("")) {
+                streetDAO.addStreet(order.getDeparturePoint().trim());
+            }
+            if (streetDAO.getStreet(order.getArrivalPoint().trim()).equals("")) {
+                streetDAO.addStreet(order.getArrivalPoint().trim());
+            }
             passenger.setBonus(passenger.getBonus() + cost);
             userDAO.userUpdate(passenger);
             driverRepository.freeDriver(order.getDriver());

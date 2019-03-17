@@ -81,7 +81,7 @@ public class Driver extends User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), status, carName, carNumber, currentPoint);
+        return Objects.hash(super.hashCode(), status, carName, carNumber, currentPoint, car);
     }
 
 

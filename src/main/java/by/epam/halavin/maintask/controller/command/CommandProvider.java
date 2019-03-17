@@ -46,6 +46,8 @@ public class CommandProvider {
         map.put(CommandNames.REFRESH_ADMIN_PAGE, new RefreshAdminPage());
         map.put(CommandNames.GET_USER_ORDERS, new GetUserOrders());
         map.put(CommandNames.CLOSE_USER_ORDERS, new CloseUserOrders());
+        map.put(CommandNames.NEXT_BY_VALUE_ORDERS, new NextByValueOrders());
+        map.put(CommandNames.AJAX_CUR_STREET, new AjaxStreet());
     }
 
     public CommandProvider() {

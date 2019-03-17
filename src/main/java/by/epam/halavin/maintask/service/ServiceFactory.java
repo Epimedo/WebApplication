@@ -28,6 +28,7 @@ public class ServiceFactory {
     private final UserLibrary passLibrary = new PassengerLibrary();
     private final UserLibrary driverLibrary = new DriverLibrary();
     private final OrderLibrary orderLibrary = new SimpleOrderLibrary();
+    private final StreetLibrary streetLibrary = new DefaultStreetLibrary();
 
     private Map<AccountTypes, UserService> userMap = new HashMap<>();
     private Map<AccountTypes, Validator> validatorMap = new HashMap<>();
@@ -62,6 +63,10 @@ public class ServiceFactory {
 
     public UserService getUserService(String accountType) {
         return userMap.get(AccountTypes.valueOf(accountType.toUpperCase()));
+    }
+
+    public StreetLibrary getStreetLibrary() {
+        return streetLibrary;
     }
 
     public Validator getUserValidator(String accountType) {

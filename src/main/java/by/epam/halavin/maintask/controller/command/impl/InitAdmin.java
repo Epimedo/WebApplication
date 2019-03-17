@@ -20,6 +20,7 @@ public class InitAdmin implements Command {
     public static final Logger log = LogManager.getLogger(SignIn.class);
     private final int START_INDEX = 1;
     private final int COUNT = 5;
+    private final String addUrl = "?command=REFRESH_ADMIN_PAGE";
     private String driverBlocks = "driverBlocks";
     private String passengerBlocks = "passengerBlocks";
 
@@ -39,11 +40,12 @@ public class InitAdmin implements Command {
             session.setAttribute(Attributes.DRIVERS.getName(), driLibrary.getUserIndexOf(START_INDEX, COUNT));
             session.setAttribute(Attributes.CUR_PASS_POSITION.getName(), START_INDEX);
             session.setAttribute(Attributes.CUR_DRIVER_POSITION.getName(), START_INDEX);
+            session.setAttribute(Attributes.FOCUS_TABLE.getName(), Attributes.USER_TABLE.getName());
         } catch (ServiceException e) {
             log.error(e.getStackTrace());
         }
 
-        String url = Urls.ADMIN.getName() + "?command=REFRESH_ADMIN_PAGE";
+        String url = Urls.ADMIN.getName() + addUrl;
         session.setAttribute(Attributes.PREV_REQUEST.getName(), url);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher(page);

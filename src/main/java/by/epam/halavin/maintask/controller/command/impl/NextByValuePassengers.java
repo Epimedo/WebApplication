@@ -36,6 +36,7 @@ public class NextByValuePassengers implements Command {
             session.setAttribute(Attributes.PASSENGERS.getName(), passLibrary.getUserIndexOf(start,
                     start + COUNT - 1));
             session.setAttribute(Attributes.CUR_PASS_POSITION.getName(), start);
+            session.setAttribute(Attributes.FOCUS_TABLE.getName(), Attributes.USER_TABLE.getName());
         } catch (ServiceException e) {
             log.error(e.getMessage());
         }

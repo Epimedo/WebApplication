@@ -18,6 +18,7 @@ public class GoToMain implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String page = Urls.MAIN_JSP.getName();
         HttpSession session = request.getSession();
+        session.setAttribute(Attributes.RESPONSE_STATUS.getName(), null);
 
         String url = CreatorFullURL.create(request);
         session.setAttribute(Attributes.PREV_REQUEST.getName(), url);

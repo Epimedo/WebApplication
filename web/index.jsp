@@ -69,7 +69,8 @@
     <fmt:message bundle="${loc}" key="local.userSurname" var="userSurname"/>
     <fmt:message bundle="${loc}" key="local.userEmail" var="userEmail"/>
     <fmt:message bundle="${loc}" key="local.userPhone" var="userPhone"/>
-
+    <fmt:message bundle="${loc}" key="local.registration" var="registration"/>
+    <fmt:message bundle="${loc}" key="local.successSigned" var="signedSuccess"/>
 </head>
 
 <body id="page-top">
@@ -184,131 +185,179 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg text-right">
-                <div class="container">
-                    <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#delete">
-                        <c:out value="${signIn}"/>
-                    </button>
-                    <div id="delete" class="modal fade">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title"><c:out value="${signIn}"/></h4>
-                                    <button class="close" type="button" data-dismiss="modal">×</button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="post" action="/Taxi/main">
-                                        <div class="form-group">
-                                            <label class="text-left"><c:out value="${selectAccount}"/></label>
-                                            <select name="accountType" class="form-control">
-                                                <option value="Admin"><c:out value="${admin}"/></option>
-                                                <option value="Driver"><c:out value="${driver}"/></option>
-                                                <option value="Passenger"><c:out value="${passenger}"/></option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <c:if test="${sessionScope.responseStatus=='incorrectEmail'}">
-                                                <label><c:out value="${incorrectEmail}"/></label>
-                                            </c:if>
-                                            <input name="email" type="email"
-                                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control"
-                                                   placeholder="${enterEmail}"
-                                                   required autofocus>
-                                        </div>
-                                        <div class="form-group">
-                                            <c:if test="${sessionScope.responseStatus=='incorrectPassword'}">
-                                                <label><c:out value="${incorrectPassword}"/></label>
-                                            </c:if>
-                                            <input name="password" type="password" class="form-control"
-                                                   placeholder="${password}"
-                                                   required autofocus>
-                                        </div>
-                                        <input type="hidden" name="command" value="SIGN_IN">
-                                        <button class="btn btn-sm btn-success btn-block" type="submit">
-                                            <c:out value="${signIn}"/>
+    <c:choose>
+        <c:when test="${sessionScope.responseStatus=='incorrectEmail'}">
+            <c:set var="statusMessage" value="${incorrectEmail}"/>
+        </c:when>
+        <c:when test="${sessionScope.responseStatus=='incorrectPassword'}">
+            <c:set var="statusMessage" value="${incorrectPassword}"/>
+        </c:when>
+        <c:when test="${sessionScope.responseStatus=='successSigned'}">
+            <c:set var="statusMessage" value="${signedSuccess}"/>
+        </c:when>
+        <c:when test="${sessionScope.responseStatus=='success'}">
+            <c:set var="statusMessage" value="${registration}"/>
+        </c:when>
+        <c:when test="${sessionScope.responseStatus=='existingEmail'}">
+            <c:set var="statusMessage" value="${emailError}"/>
+        </c:when>
+        <c:when test="${sessionScope.responseStatus=='secPassIncorrect'}">
+            <c:set var="statusMessage" value="${secPassIncorrect}"/>
+        </c:when>
+    </c:choose>
+    <c:if test="${sessionScope.responseStatus!=null}">
+        <div id="signedSuccess" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-dark text-center">
+                        <h4 class="modal-title">${statusMessage}</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="button" data-dismiss="modal">
+                            <c:out value="${close}"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            window.onload = function () {
+                $('#signedSuccess').modal('show');
+            };
+        </script>
+    </c:if>
+
+    <c:if test="${sessionScope.accountStatus==null}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg text-right">
+                    <div class="container">
+                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#delete">
+                            <c:out value="${signIn}"/>
+                        </button>
+                        <div id="delete" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title"><c:out value="${signIn}"/></h4>
+                                        <button class="close" type="button" data-dismiss="modal">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="/Taxi/main">
+                                            <div class="form-group">
+                                                <label class="text-left"><c:out value="${selectAccount}"/></label>
+                                                <select name="accountType" class="form-control">
+                                                    <option value="Admin"><c:out value="${admin}"/></option>
+                                                    <option value="Driver"><c:out value="${driver}"/></option>
+                                                    <option value="Passenger"><c:out value="${passenger}"/></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <c:if test="${sessionScope.responseStatus=='incorrectEmail'}">
+                                                    <label><c:out value="${incorrectEmail}"/></label>
+                                                </c:if>
+                                                <input name="email" type="email"
+                                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                                       class="form-control"
+                                                       placeholder="${enterEmail}"
+                                                       required autofocus>
+                                            </div>
+                                            <div class="form-group">
+                                                <c:if test="${sessionScope.responseStatus=='incorrectPassword'}">
+                                                    <label><c:out value="${incorrectPassword}"/></label>
+                                                </c:if>
+                                                <input name="password" type="password" class="form-control"
+                                                       placeholder="${password}"
+                                                       required autofocus>
+                                            </div>
+                                            <input type="hidden" name="command" value="SIGN_IN">
+                                            <button class="btn btn-sm btn-success btn-block" type="submit">
+                                                <c:out value="${signIn}"/>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" type="button" data-dismiss="modal">
+                                            <c:out value="${close}"/>
                                         </button>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default" type="button" data-dismiss="modal">
-                                        <c:out value="${close}"/>
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg text-left">
-                <div class="container">
-                    <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#register">
-                        <c:out value="${registerIn}"/>
-                    </button>
-                    <div id="register" class="modal fade">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title"><c:out value="${createAc}"/></h4>
-                                    <button class="close" type="button" data-dismiss="modal">×</button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="post" action="/Taxi/main">
-                                        <div class="form-group">
-                                            <label><c:out value="${userName}"/></label>
-                                            <input name="name" type="text" pattern=".{1,20}" class="form-control"
-                                                   placeholder="${name}"
-                                                   required autofocus>
-                                        </div>
-                                        <div class="form-group">
-                                            <label><c:out value="${userSurname}"/></label>
-                                            <input name="surname" type="text" pattern=".{1,20}" class="form-control"
-                                                   placeholder="${surname}"
-                                                   required autofocus>
-                                        </div>
-                                        <div class="form-group">
-                                            <label><c:out value="${userEmail}"/></label>
-                                            <c:if test="${sessionScope.responseStatus=='existingEmail'}">
-                                                <label><c:out value="${emailError}"/></label>
-                                            </c:if>
-                                            <input name="email" type="email"
-                                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control"
-                                                   placeholder="${enterEmail}" required
-                                                   autofocus>
-                                        </div>
-                                        <div class="form-group">
-                                            <label><c:out value="${userPhone}"/></label>
-                                            <input name="tel" pattern="\+375\s\d{2}\s\d{3}\s\d{2}\s\d{2}"
-                                                   class="form-control" placeholder="${phone}"
-                                                   required
-                                                   autofocus>
-                                        </div>
-                                        <div class="form-group">
-                                            <input name="password" type="password" pattern=".{6,}" class="form-control"
-                                                   placeholder="${createPass}"
-                                                   required autofocus>
-                                        </div>
-                                        <div class="form-group">
-                                            <c:if test="${sessionScope.responseStatus=='secPassIncorrect'}">
-                                                <label><c:out value="${secPassIncorrect}"/></label>
-                                            </c:if>
-                                            <input name="secondPassword" type="password" pattern=".{6,}"
-                                                   class="form-control"
-                                                   placeholder="${createPassSecond}"
-                                                   required autofocus>
-                                        </div>
-                                        <input type="hidden" name="accountType" value="Passenger">
-                                        <input type="hidden" name="command" value="REGISTER_IN_Pass">
-                                        <button class="btn btn-sm btn-success btn-block" type="submit">
-                                            <c:out value="${create}"/>
+                <div class="col-lg text-left">
+                    <div class="container">
+                        <button class="btn btn-success btn-sm" type="button" data-toggle="modal"
+                                data-target="#register">
+                            <c:out value="${registerIn}"/>
+                        </button>
+                        <div id="register" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title"><c:out value="${createAc}"/></h4>
+                                        <button class="close" type="button" data-dismiss="modal">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="/Taxi/main">
+                                            <div class="form-group">
+                                                <label><c:out value="${userName}"/></label>
+                                                <input name="name" type="text" pattern=".{1,20}" class="form-control"
+                                                       placeholder="${name}"
+                                                       required autofocus>
+                                            </div>
+                                            <div class="form-group">
+                                                <label><c:out value="${userSurname}"/></label>
+                                                <input name="surname" type="text" pattern=".{1,20}" class="form-control"
+                                                       placeholder="${surname}"
+                                                       required autofocus>
+                                            </div>
+                                            <div class="form-group">
+                                                <label><c:out value="${userEmail}"/></label>
+                                                <c:if test="${sessionScope.responseStatus=='existingEmail'}">
+                                                    <label><c:out value="${emailError}"/></label>
+                                                </c:if>
+                                                <input name="email" type="email"
+                                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                                       class="form-control"
+                                                       placeholder="${enterEmail}" required
+                                                       autofocus>
+                                            </div>
+                                            <div class="form-group">
+                                                <label><c:out value="${userPhone}"/></label>
+                                                <input name="tel" pattern="\+375\s\d{2}\s\d{3}\s\d{2}\s\d{2}"
+                                                       class="form-control" placeholder="${phone}"
+                                                       required
+                                                       autofocus>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="password" type="password" pattern=".{6,}"
+                                                       class="form-control"
+                                                       placeholder="${createPass}"
+                                                       required autofocus>
+                                            </div>
+                                            <div class="form-group">
+                                                <c:if test="${sessionScope.responseStatus=='secPassIncorrect'}">
+                                                    <label><c:out value="${secPassIncorrect}"/></label>
+                                                </c:if>
+                                                <input name="secondPassword" type="password" pattern=".{6,}"
+                                                       class="form-control"
+                                                       placeholder="${createPassSecond}"
+                                                       required autofocus>
+                                            </div>
+                                            <input type="hidden" name="accountType" value="Passenger">
+                                            <input type="hidden" name="command" value="REGISTER_IN_Pass">
+                                            <button class="btn btn-sm btn-success btn-block" type="submit">
+                                                <c:out value="${create}"/>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-default" type="button" data-dismiss="modal">
+                                            <c:out value="${close}"/>
                                         </button>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default" type="button" data-dismiss="modal">
-                                        <c:out value="${close}"/>
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -316,7 +365,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </c:if>
 </section>
 
 <section id="services" class="bg-light">

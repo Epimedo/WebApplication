@@ -7,9 +7,13 @@ import by.epam.halavin.maintask.service.order.DefaultOrderDispatcher;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DispatcherRepository {
     private static DispatcherRepository instance = new DispatcherRepository();
+    private final Lock lock = new ReentrantLock();
+    private final Lock passLock = new ReentrantLock();
     private Set<DefaultOrderDispatcher> set = new HashSet<>();
 
     private DispatcherRepository() {
@@ -20,6 +24,8 @@ public class DispatcherRepository {
     }
 
     public DefaultOrderDispatcher driverCheck(Driver driver) {
+        lock.lock();
+
         Driver drv;
         DefaultOrderDispatcher orderDispatcher = null;
         DefaultOrderDispatcher driverOrderDispatcher = null;
@@ -35,10 +41,12 @@ public class DispatcherRepository {
             }
         }
 
+        lock.unlock();
         return driverOrderDispatcher;
     }
 
     public DefaultOrderDispatcher getOrderDispatcher(Passenger passenger) {
+        passLock.lock();
         Passenger pass;
         DefaultOrderDispatcher orderDispatcher = null;
         Iterator<DefaultOrderDispatcher> iterator = set.iterator();
@@ -52,10 +60,12 @@ public class DispatcherRepository {
             }
         }
 
+        passLock.unlock();
         return orderDispatcher;
     }
 
     public void removeOrderDispatcher(Passenger passenger) {
+        lock.lock();
         Passenger pass;
         DefaultOrderDispatcher orderDispatcher = null;
         Iterator<DefaultOrderDispatcher> iterator = set.iterator();
@@ -69,10 +79,14 @@ public class DispatcherRepository {
                 break;
             }
         }
-
+        lock.unlock();
     }
 
     public void addOrderDispatcher(DefaultOrderDispatcher orderDispatcher) {
+        lock.lock();
+
         set.add(orderDispatcher);
+
+        lock.unlock();
     }
 }

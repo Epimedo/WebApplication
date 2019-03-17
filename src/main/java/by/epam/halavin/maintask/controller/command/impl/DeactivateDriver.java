@@ -18,10 +18,11 @@ import java.io.IOException;
 
 public class DeactivateDriver implements Command {
     public static final Logger log = LogManager.getLogger(ActivateDriver.class);
+    private final String addUrl = "?command=GO_TO_DRIVER";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String page = Urls.DRIVER.getName() + "?command=GO_TO_DRIVER";
+        String page = Urls.DRIVER.getName() + addUrl;
         ServiceFactory factory = ServiceFactory.getInstance();
         DriverManager manager = factory.createDriverManager();
         HttpSession session = request.getSession();

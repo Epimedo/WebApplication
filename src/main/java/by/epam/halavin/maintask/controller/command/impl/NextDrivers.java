@@ -40,6 +40,7 @@ public class NextDrivers implements Command {
 
             session.setAttribute(Attributes.DRIVERS.getName(), driLibrary.getUserIndexOf(start, count));
             session.setAttribute(Attributes.CUR_DRIVER_POSITION.getName(), start);
+            session.setAttribute("focusTable","driverTable");
         } catch (ServiceException e) {
             log.error(e.getMessage());
         }

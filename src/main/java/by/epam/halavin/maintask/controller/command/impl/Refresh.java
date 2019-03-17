@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class Refresh implements Command {
+    private final String addUrl = "?command=GO_TO_ORDER";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,7 +32,7 @@ public class Refresh implements Command {
             session.setAttribute(Attributes.ORDER.getName(), orderDispatcher.getOrder());
         }
 
-        String page = Urls.ORDER.getName() + "?command=GO_TO_ORDER";
+        String page = Urls.ORDER.getName() + addUrl;
         response.sendRedirect(page);
     }
 }

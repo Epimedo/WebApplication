@@ -45,6 +45,7 @@ public class SimpleOrderDAOTest {
         System.out.println(orderDAO.getUserOrderCount(1));
     }
 
+
     @Test
     public void getUserOrdersIndexOf() throws DAOException{
         System.out.println(orderDAO.getUserOrdersIndexOf(1,1,4));

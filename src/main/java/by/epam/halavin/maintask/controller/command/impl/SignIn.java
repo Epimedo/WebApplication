@@ -6,8 +6,8 @@ import by.epam.halavin.maintask.controller.command.CreatorFullURL;
 import by.epam.halavin.maintask.controller.info.Attributes;
 import by.epam.halavin.maintask.controller.info.Urls;
 import by.epam.halavin.maintask.service.ServiceFactory;
-import by.epam.halavin.maintask.service.user.UserService;
 import by.epam.halavin.maintask.service.exception.ServiceException;
+import by.epam.halavin.maintask.service.user.UserService;
 import by.epam.halavin.maintask.service.validate.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,13 +44,13 @@ public class SignIn implements Command {
                     User user = userService.signIn(request.getParameter(Attributes.EMAIL.getName()),
                             request.getParameter(Attributes.PASSWORD.getName()));
                     session.setAttribute(Attributes.ACCOUNT.getName(), user);
+                    session.setAttribute(Attributes.RESPONSE_STATUS.getName(), Attributes.SUCCESS_SIGNED.getName());
                     session.setAttribute(Attributes.ACCOUNT_STATUS.getName(), Attributes.SIGNED.getName() +
                             request.getParameter(Attributes.ACCOUNT_TYPE.getName()));
                 }
             }
         } catch (ServiceException e) {
             log.error(e.getStackTrace());
-            e.printStackTrace();
         }
 
         String url = CreatorFullURL.create(request);

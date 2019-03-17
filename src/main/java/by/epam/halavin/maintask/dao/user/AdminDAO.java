@@ -16,6 +16,7 @@ public class AdminDAO implements UserDAO {
     private String selectAdmin = "select * from admins where email = ?";
     private String selectPassword = "select password from admins where email =?";
     private String selectAdminById = "select * from admins where admin_id = ?";
+    private String errorMessage = "Unsupported language";
 
     @Override
     public User getUser(String email) throws DAOException {
@@ -79,12 +80,12 @@ public class AdminDAO implements UserDAO {
 
     @Override
     public boolean registration(User user) throws DAOException {
-        return false;
+        throw new DAOException(errorMessage);
     }
 
     @Override
     public void userUpdate(User user) throws DAOException {
-
+        throw new DAOException(errorMessage);
     }
 
     @Override

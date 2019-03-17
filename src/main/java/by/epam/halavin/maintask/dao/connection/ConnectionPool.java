@@ -1,98 +1,120 @@
 package by.epam.halavin.maintask.dao.connection;
 
 import by.epam.halavin.maintask.dao.exception.DAOException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayDeque;
 import java.util.Properties;
-import java.util.Vector;
+import java.util.Queue;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
-    public static final Logger log = LogManager.getLogger(ConnectionPool.class);
     private static final String propPath = "sqlConnection.properties";
     private static final String errorInfo = "The connection is from other pool.";
+    private static final String URL = "url";
+    private static final String DRIVER = "driver";
+    private static final String PASSWORD = "password";
+    private static final String USER = "user";
+    private static final String CONNECTION_COUNT = "connectionCount";
     private static ConnectionPool instance;
 
-    static {
-        Properties properties = new Properties();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        try {
-            properties.load(classLoader.getResourceAsStream(propPath));
-            String url = properties.getProperty("url");
-            String driver = properties.getProperty("driver");
-            String password = properties.getProperty("password");
-            String user = properties.getProperty("user");
-            String count = properties.getProperty("connectionCount");
-
-            instance = new ConnectionPool(url, user, password, driver, Integer.parseInt(count));
-        } catch (IOException e) {
-            log.error(e);
-        }
-    }
-
-    private Vector<Connection> availableConnections = new Vector<Connection>();
-    private Vector<Connection> usedConnections = new Vector<Connection>();
+    private final Lock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
+    private Queue<Connection> availableConnections = new ArrayDeque<>();
+    private Queue<Connection> usedConnections = new ArrayDeque<>();
     private String url;
     private String password;
     private String user;
+    private int count;
 
-    private ConnectionPool(String url, String user, String password, String driver, int connectionCount) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
+    private ConnectionPool() throws DAOException {
+        Properties properties = new Properties();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         try {
+            properties.load(classLoader.getResourceAsStream(propPath));
+            url = properties.getProperty(URL);
+            String driver = properties.getProperty(DRIVER);
+            password = properties.getProperty(PASSWORD);
+            user = properties.getProperty(USER);
+            count = Integer.parseInt(properties.getProperty(CONNECTION_COUNT));
+
             Class.forName(driver);
-        } catch (ClassNotFoundException e) {
-            log.info(e);
+        } catch (ClassNotFoundException | IOException e) {
+            throw new DAOException(e);
         }
 
-        for (int i = 0; i < connectionCount; i++) {
-            availableConnections.addElement(makeConnection());
+        for (int i = 0; i < count; i++) {
+            availableConnections.add(makeConnection());
         }
     }
 
-    public static ConnectionPool getInstance() {
+    public static synchronized ConnectionPool getInstance() throws DAOException {
+        try {
+            if (instance == null) {
+                instance = new ConnectionPool();
+            }
+        } catch (DAOException e) {
+            throw new DAOException(e);
+        }
+
         return instance;
     }
 
-    private Connection makeConnection() {
+    private Connection makeConnection() throws DAOException {
         Connection connection = null;
 
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
-            log.info(e);
+            throw new DAOException(e);
         }
 
         return connection;
     }
 
-    public synchronized Connection getConnection() {
+    public Connection getConnection() throws DAOException {
+        lock.lock();
         Connection connection = null;
 
-        if (availableConnections.isEmpty()) {
-            connection = makeConnection();
-        } else {
-            connection = availableConnections.lastElement();
-            availableConnections.remove(connection);
+        try {
+            if (availableConnections.isEmpty()) {
+                condition.await();
+                connection = availableConnections.poll();
+                availableConnections.remove(connection);
+            } else {
+                connection = availableConnections.poll();
+                availableConnections.remove(connection);
+            }
+
+            usedConnections.add(connection);
+        } catch (InterruptedException e) {
+            throw new DAOException(e);
+        } finally {
+            lock.unlock();
         }
 
-        usedConnections.addElement(connection);
         return connection;
     }
 
-    public synchronized void releaseConnection(Connection connection) throws DAOException {
+    public void releaseConnection(Connection connection) throws DAOException {
+        lock.lock();
+
         if (connection != null) {
             if (usedConnections.remove(connection)) {
-                availableConnections.addElement(connection);
+                availableConnections.add(connection);
+                condition.signal();
             } else {
+                lock.unlock();
                 throw new DAOException(errorInfo);
             }
         }
+
+        lock.unlock();
     }
 }

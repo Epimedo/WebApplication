@@ -18,6 +18,7 @@ import java.io.IOException;
 
 public class Accept implements Command {
     public static final Logger log = LogManager.getLogger(Accept.class);
+    public final String addUrl = "?command=GO_TO_DRIVER";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,7 +38,7 @@ public class Accept implements Command {
             session.setAttribute(Attributes.ORDER.getName(), orderDispatcher.getOrder());
         }
 
-        String page = Urls.DRIVER.getName() + "?command=GO_TO_DRIVER";
+        String page = Urls.DRIVER.getName() + addUrl;
         response.sendRedirect(page);
     }
 }

@@ -39,6 +39,8 @@
     <fmt:message bundle="${loc}" key="local.activate" var="ACtivate"/>
     <fmt:message bundle="${loc}" key="local.deactivate" var="Deactivate"/>
     <fmt:message bundle="${loc}" key="local.infoBanAccount" var="infoBanAc"/>
+    <fmt:message bundle="${loc}" key="local.orderControl" var="orderControl"/>
+    <fmt:message bundle="${loc}" key="local.driverCheckupEnd" var="driverCheckupEnd"/>
 
 
 </head>
@@ -68,12 +70,12 @@
                             value="${singOut}"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="/Taxi/order?command=en">
+                    <a class="nav-link js-scroll-trigger" href="/Taxi/driver?command=en">
                         <c:out value="${en_button}"/>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="/Taxi/order?command=ru">
+                    <a class="nav-link js-scroll-trigger" href="/Taxi/driver?command=ru">
                         <c:out value="${ru_button}"/>
                     </a>
                 </li>
@@ -85,7 +87,7 @@
 <header class="bg-primary text-white"
         style="background: url('https://www.goalcast.com/wp-content/uploads/2017/11/road-trip-2.jpg') no-repeat center center fixed">
     <div class="container text-center">
-        <h1>Управление вашими заказами</h1>
+        <h1><c:out value="${orderControl}"/></h1>
         <p class="lead"></p>
     </div>
 </header>
@@ -120,7 +122,7 @@
                 </c:if>
                 <c:if test="${sessionScope.driverStatus=='carChekupEnd'}">
                     <div class="container">
-                        <h3 class="text-light">Истек срок действия техосмотра вашей машины.</h3>
+                        <h3 class="text-light"><c:out value="${driverCheckupEnd}"/></h3>
                     </div>
                     <div class="container">
                         <form method="post" action="/Taxi/driver">

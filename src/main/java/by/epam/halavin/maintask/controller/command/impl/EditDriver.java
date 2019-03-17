@@ -14,14 +14,17 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class EditDriver implements Command {
     public static final Logger log = LogManager.getLogger(EditDriver.class);
+    private final String addUrl = "?command=REFRESH_ADMIN_PAGE";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String page = Urls.ADMIN.getName() + "?command=REFRESH_ADMIN_PAGE";
+        HttpSession session = request.getSession();
+        String page = Urls.ADMIN.getName() + addUrl;
         ServiceFactory factory = ServiceFactory.getInstance();
         UserLibrary driverLab = factory.getDriverLibrary();
 
@@ -29,10 +32,10 @@ public class EditDriver implements Command {
             User user = driverLab.findUser(Integer.parseInt(request.getParameter(Attributes.ID.getName())));
             Driver driver = (Driver) user;
             driver.setStatus(request.getParameter(Attributes.STATUS.getName()));
+            session.setAttribute(Attributes.FOCUS_TABLE.getName(), Attributes.DRIVER_TABLE.getName());
 
             driverLab.editUser(driver);
         } catch (ServiceException e) {
-            e.printStackTrace();
             log.error(e.getStackTrace());
         }
 

@@ -5,9 +5,8 @@ import by.epam.halavin.maintask.controller.command.Command;
 import by.epam.halavin.maintask.controller.info.Attributes;
 import by.epam.halavin.maintask.controller.info.Urls;
 import by.epam.halavin.maintask.service.AccountTypes;
-import by.epam.halavin.maintask.service.bridge.DispatcherBridge;
-import by.epam.halavin.maintask.service.order.DefaultOrderDispatcher;
 import by.epam.halavin.maintask.service.ServiceFactory;
+import by.epam.halavin.maintask.service.bridge.DispatcherBridge;
 import by.epam.halavin.maintask.service.exception.ServiceException;
 import by.epam.halavin.maintask.service.order.OrderDispatcher;
 import by.epam.halavin.maintask.service.validate.Validator;
@@ -22,6 +21,7 @@ import java.io.IOException;
 
 public class DriverSearch implements Command {
     public static final Logger log = LogManager.getLogger(DriverSearch.class);
+    private final String addUrl = "?command=GO_TO_ORDER";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -57,7 +57,7 @@ public class DriverSearch implements Command {
             log.error(e.getMessage());
         }
 
-        String page = Urls.ORDER.getName() + "?command=GO_TO_ORDER";
+        String page = Urls.ORDER.getName() + addUrl;
         response.sendRedirect(page);
     }
 }

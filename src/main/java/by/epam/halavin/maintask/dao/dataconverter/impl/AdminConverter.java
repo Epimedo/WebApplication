@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminConverter implements UserConverter {
-    public static final int ID_COL = 1;
-    public static final int EMAIL_COL = 2;
-    public static final int NAME_COL = 3;
-    public static final int SURNAME_COL = 4;
-    public static final int TEL_COL = 5;
-    public static final int PASSWORD_COl = 6;
+    public static final String ID_COL = "admin_id";
+    public static final String EMAIL_COL = "email";
+    public static final String NAME_COL = "name";
+    public static final String SURNAME_COL = "surname";
+    public static final String TEL_COL = "tel";
+    public static final String PASSWORD_COl = "password";
 
 
     @Override
@@ -24,7 +24,7 @@ public class AdminConverter implements UserConverter {
         AdminBuilder builder = new AdminBuilder();
 
         try {
-            if(!resultSet.next()){
+            if (!resultSet.next()) {
                 return null;
             }
             if (!resultSet.isFirst()) {

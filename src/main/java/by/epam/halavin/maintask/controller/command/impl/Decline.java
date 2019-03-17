@@ -20,6 +20,7 @@ import java.io.IOException;
 
 public class Decline implements Command {
     public static final Logger log = LogManager.getLogger(Decline.class);
+    private final String addUrl = "?command=GO_TO_DRIVER";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,7 +38,7 @@ public class Decline implements Command {
         session.setAttribute(Attributes.ORDER.getName(), null);
         session.setAttribute(Attributes.DRIVER_STATUS.getName(), orderDispatcher.getDriverStatus());
 
-        String page = Urls.DRIVER.getName() + "?command=GO_TO_DRIVER";
+        String page = Urls.DRIVER.getName() + addUrl;
         response.sendRedirect(page);
     }
 }

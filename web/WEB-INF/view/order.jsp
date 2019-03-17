@@ -50,10 +50,18 @@
     <fmt:message bundle="${loc}" key="local.closeOrders" var="closeOrders"/>
     <fmt:message bundle="${loc}" key="local.date" var="date"/>
     <fmt:message bundle="${loc}" key="local.cost" var="cost"/>
+    <fmt:message bundle="${loc}" key="local.noAvailableDrivers" var="noAvailableDrivers"/>
 
 </head>
 
 <body id="page-top">
+<c:if test="${sessionScope.focusTable=='orderTable'}">
+    <script>
+        window.onload = function () {
+            window.location = "#orderTable";
+        }
+    </script>
+</c:if>
 <script>
     if (typeof window.history.pushState == 'function') {
         window.history.pushState({}, "Hide", "http:/Taxi/order");
@@ -116,34 +124,134 @@
                 </div>
                 <c:if test="${sessionScope.orderStatus=='noAvailableDrivers'}">
                     <div class="container">
-                        <h2 class="text-light">Нет свободных водителей!</h2>
+                        <h2 class="text-light"><c:out value="${noAvailableDrivers}"/></h2>
                     </div>
                     <form method="post" action="/Taxi/order">
                         <div class="form-group">
-                            <input name="currentPosition" type="text" class="form-control"
+                            <input id="currentPositionNo" name="currentPosition" type="text" class="form-control"
                                    placeholder="${currentPosition}"
                                    required autofocus>
+                            <datalist id="forCurPosNo">
+                                <option id="forCurPos1No"></option>
+                            </datalist>
                         </div>
                         <div class="form-group">
-                            <input name="nextPosition" type="text" class="form-control" placeholder="${nextPosition}"
+                            <input id="nextPositionNo" name="nextPosition" type="text" class="form-control"
+                                   placeholder="${nextPosition}"
                                    required autofocus>
+                            <datalist id="forNextPosNo">
+                                <option id="forNextPos1No"></option>
+                            </datalist>
                         </div>
                         <input name="command" type="hidden" value="driverSearch">
                         <button class="btn btn-sm btn-success btn-block" type="submit"><c:out
                                 value="${order}"/></button>
+                        <script>
+                            var input1 = document.getElementById('currentPositionNo');
+
+                            input1.oninput = function () {
+                                var data = {};
+                                var command = 'AJAX_CUR_STREET';
+                                data = {"command": command, "curStreet": $("#currentPositionNo").val()}
+                                $.ajax
+                                ({
+                                    type: "POST",
+                                    data: data,
+                                    url: '/Taxi/order',
+                                    success: function (serverData) {
+                                        console.log(serverData.answer);
+                                        var obj = document.getElementById('forCurPos1No');
+                                        obj.value = serverData.answer;
+                                    },
+                                    error: function () {
+                                        console.log(data);
+                                    }
+                                });
+                            };
+                            var input2 = document.getElementById('nextPositionNo');
+                            input2.oninput = function () {
+                                var data = {};
+                                var command = 'AJAX_CUR_STREET';
+                                data = {"command": command, "curStreet": $("#nextPositionNo").val()}
+                                $.ajax
+                                ({
+                                    type: "POST",
+                                    data: data,
+                                    url: '/Taxi/order',
+                                    success: function (serverData) {
+                                        console.log(serverData.answer);
+                                        var obj = document.getElementById('forNextPos1No');
+                                        obj.value = serverData.answer;
+                                    },
+                                    error: function () {
+                                        console.log(data);
+                                    }
+                                })
+                            }
+                        </script>
                     </form>
                 </c:if>
                 <c:if test="${sessionScope.orderStatus==null}">
                     <form method="post" action="/Taxi/order">
                         <div class="form-group">
-                            <input name="currentPosition" type="text" class="form-control"
-                                   placeholder="${currentPosition}"
+                            <input id="currentPosition" name="currentPosition" type="text" class="form-control"
+                                   placeholder="${currentPosition}" list="forCurPos" autocomplete="off"
                                    required autofocus>
+                            <datalist id="forCurPos">
+                                <option id="forCurPos1"></option>
+                            </datalist>
                         </div>
                         <div class="form-group">
-                            <input name="nextPosition" type="text" class="form-control" placeholder="${nextPosition}"
+                            <input id="nextPosition" name="nextPosition" type="text" class="form-control"
+                                   placeholder="${nextPosition}" list="forNextPos" autocomplete="off"
                                    required autofocus>
+                            <datalist id="forNextPos">
+                                <option id="forNextPos1"></option>
+                            </datalist>
                         </div>
+                        <script>
+                            var input1 = document.getElementById('currentPosition');
+
+                            input1.oninput = function () {
+                                var data = {};
+                                var command = 'AJAX_CUR_STREET';
+                                data = {"command": command, "curStreet": $("#currentPosition").val()}
+                                $.ajax
+                                ({
+                                    type: "POST",
+                                    data: data,
+                                    url: '/Taxi/order',
+                                    success: function (serverData) {
+                                        console.log(serverData.answer);
+                                        var obj = document.getElementById('forCurPos1');
+                                        obj.value = serverData.answer;
+                                    },
+                                    error: function () {
+                                        console.log(data);
+                                    }
+                                });
+                            };
+                            var input2 = document.getElementById('nextPosition');
+                            input2.oninput = function () {
+                                var data = {};
+                                var command = 'AJAX_CUR_STREET';
+                                data = {"command": command, "curStreet": $("#nextPosition").val()}
+                                $.ajax
+                                ({
+                                    type: "POST",
+                                    data: data,
+                                    url: '/Taxi/order',
+                                    success: function (serverData) {
+                                        console.log(serverData.answer);
+                                        var obj = document.getElementById('forNextPos1');
+                                        obj.value = serverData.answer;
+                                    },
+                                    error: function () {
+                                        console.log(data);
+                                    }
+                                })
+                            }
+                        </script>
                         <input name="command" type="hidden" value="driverSearch">
                         <button class="btn btn-sm btn-success btn-block" type="submit"><c:out
                                 value="${order}"/></button>
@@ -258,7 +366,7 @@
                     </div>
                 </c:if>
                 <c:if test="${sessionScope.orders!=null}">
-                    <div class="container text-center">
+                    <div id="orderTable" class="container text-center" style="padding-bottom: 25px">
                         <div class="container">
                             <form method="post" action="/Taxi/order">
                                 <input type="hidden" name="command" value="CLOSE_USER_ORDERS">
@@ -274,7 +382,6 @@
                         <table class="table table-bordered bg-white" style="border-radius: 25px; border: hidden;">
                             <thead>
                             <tr>
-                                <th class="col-xs-3">№</th>
                                 <th class="col-xs-8"><c:out value="${name}"/></th>
                                 <th class="col-xs-3"><c:out value="${carNumber}"/></th>
                                 <th class="col-xs-3"><c:out value="${date}"/></th>
@@ -284,9 +391,6 @@
                             <c:forEach var="order" items="${sessionScope.orders}">
                                 <tbody>
                                 <tr>
-                                    <td class="col-xs-3">
-                                        <c:out value="${order.orderId}"/>
-                                    </td>
                                     <td class="col-xs-8">
                                         <c:out value="${order.driver.name}"/>
                                         <c:out value="${order.driver.surname}"/>
@@ -305,6 +409,21 @@
                                 </tbody>
                             </c:forEach>
                         </table>
+                    </div>
+                    <div class="container">
+                        <div class="row text-center">
+                            <c:forEach var="block" items="${sessionScope.orderBlocks}">
+                                <div class="col-form-label">
+                                    <form action="/Taxi/order" method="post">
+                                        <input type="hidden" name="blockNumber" value="${block}">
+                                        <input type="hidden" name="command" value="NEXT_BY_VALUE_ORDERS">
+                                        <button class="btn btn-sm" type="submit">
+                                            <c:out value="${block}"/>
+                                        </button>
+                                    </form>
+                                </div>
+                            </c:forEach>
+                        </div>
                     </div>
                 </c:if>
             </div>

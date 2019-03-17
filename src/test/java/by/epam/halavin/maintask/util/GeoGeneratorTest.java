@@ -2,6 +2,9 @@ package by.epam.halavin.maintask.util;
 
 import by.epam.halavin.maintask.bean.geocoding.Point;
 import by.epam.halavin.maintask.bean.user.Driver;
+import by.epam.halavin.maintask.controller.command.impl.Accept;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -33,6 +36,6 @@ public class GeoGeneratorTest {
         drivers.add(new Driver());
 
         geoGenerator.generatePointsFor(drivers);
-        System.out.println(Objects.toString(drivers));
+        Logger log = LogManager.getLogger();
     }
 }

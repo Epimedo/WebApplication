@@ -76,6 +76,7 @@ public class Car implements Serializable {
                 "id=" + id +
                 ", number='" + number + '\'' +
                 ", name='" + name + '\'' +
+                ", date=" + date +
                 '}';
     }
 }
