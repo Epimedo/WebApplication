@@ -1,16 +1,19 @@
 package by.epam.halavin.maintask.controller.command;
 
 import by.epam.halavin.maintask.controller.command.impl.*;
-import by.epam.halavin.maintask.controller.info.Attributes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Provider defines which command to represent
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class CommandProvider {
     public static final Logger log = LogManager.getLogger(CommandProvider.class);
     private Map<CommandNames, Command> map = new HashMap<CommandNames, Command>();
@@ -53,6 +56,12 @@ public class CommandProvider {
     public CommandProvider() {
     }
 
+    /**
+     * Function to get command object depending on command name
+     *
+     * @param commandName
+     * @return
+     */
     public Command getCommand(String commandName) {
         Command command;
         if (commandName != null) {
@@ -62,18 +71,6 @@ public class CommandProvider {
         }
 
         return command;
-    }
-
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
-        Command command;
-
-        if (request.getParameter(Attributes.COMMAND.getName()) == null) {
-            command = map.get(CommandNames.EMPTY_COMMAND);
-        } else {
-            command = map.get(CommandNames.valueOf(request.getParameter(Attributes.COMMAND.getName())
-                    .toUpperCase()));
-        }
-
     }
 
 }

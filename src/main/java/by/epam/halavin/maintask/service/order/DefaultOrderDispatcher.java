@@ -19,10 +19,7 @@ import by.epam.halavin.maintask.service.geocoding.impl.GeocodingSample;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DefaultOrderDispatcher implements OrderDispatcher {
     private static final double START_PRICE = 2;
@@ -189,5 +186,31 @@ public class DefaultOrderDispatcher implements OrderDispatcher {
                 ", orderStatus='" + orderStatus + '\'' +
                 ", driverStatus='" + driverStatus + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        boolean bool = false;
+
+        if (this == o) {
+            bool = true;
+        } else {
+            if (o != null && (o.getClass() == DefaultOrderDispatcher.class)) {
+                DefaultOrderDispatcher that = (DefaultOrderDispatcher) o;
+
+                if (Double.compare(that.PROCENT, PROCENT) == 0 &&
+                        Objects.equals(order, that.order) &&
+                        Objects.equals(orderStatus, that.orderStatus) &&
+                        Objects.equals(driverStatus, that.driverStatus)) {
+                    bool = true;
+                }
+            }
+        }
+        return bool;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(PROCENT, order, orderStatus, driverStatus);
     }
 }

@@ -68,7 +68,7 @@ public class SimpleOrderDAO implements OrderDAO {
         Order order = null;
         Connection connection = ConnectionPool.getInstance().getConnection();
         OrderConverter converter = new SimpleOrderConverter();
-        DateFormat format = new SimpleDateFormat("yyyy-m-dd", Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         PreparedStatement statement = null;
 
         try {
@@ -123,7 +123,7 @@ public class SimpleOrderDAO implements OrderDAO {
     }
 
     @Override
-    public List<Order> getUserOrdersIndexOf(int id, int fr, int ls) throws DAOException {
+    public List<Order> getUserOrdersIndexOf(int id, int firstPo, int lastPos) throws DAOException {
         List<Order> listOrder = null;
         Connection connection = ConnectionPool.getInstance().getConnection();
         OrderConverter converter = new SimpleOrderConverter();
@@ -132,8 +132,8 @@ public class SimpleOrderDAO implements OrderDAO {
         try {
             statement = connection.prepareStatement(selectOrders);
             statement.setInt(1, id);
-            statement.setInt(2, fr);
-            statement.setInt(3, ls);
+            statement.setInt(2, firstPo);
+            statement.setInt(3, lastPos);
             ResultSet resultSet = statement.executeQuery();
 
             listOrder = converter.convertRows(resultSet);

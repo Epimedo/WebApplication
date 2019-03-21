@@ -15,6 +15,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Driver creator
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class DriverCreator extends UserCreator {
     private final String DEFAULT_STATUS = "ban";
     private final String parsePattern = "yyyy-mm-dd";
@@ -24,6 +30,13 @@ public class DriverCreator extends UserCreator {
         user = new Driver();
     }
 
+    /**
+     * Function gets http request and return new initialized driver object.
+     *
+     * @param request
+     * @return - driver
+     * @throws UtilException
+     */
     @Override
     public User create(HttpServletRequest request) throws UtilException {
         String name = request.getParameter(Attributes.NAME.getName());

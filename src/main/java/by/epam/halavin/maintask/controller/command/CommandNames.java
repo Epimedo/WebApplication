@@ -1,5 +1,11 @@
 package by.epam.halavin.maintask.controller.command;
 
+/**
+ * Enum lists all command names.
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public enum CommandNames {
     SIGN_IN, SIGN_OUT, REGISTER_IN_PASS, INIT_ADMIN, NEXT_PASSENGERS, NEXT_DRIVERS, EDIT_PASSENGER, EDIT_DRIVER, EMPTY_COMMAND,
     EN, RU, DRIVERSEARCH, COORDINATES, ACTIVATEDRIVER, DEACTIVATEDRIVER, REFRESH, CHECKTRIPS, ACCEPT, DECLINE, PAID,

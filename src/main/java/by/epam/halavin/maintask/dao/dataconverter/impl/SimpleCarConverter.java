@@ -7,7 +7,10 @@ import by.epam.halavin.maintask.util.builder.car.SipmpleCarBuilder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SimpleCarConverter implements CarConverter {
@@ -23,10 +26,14 @@ public class SimpleCarConverter implements CarConverter {
             if (!resultSet.isFirst()) {
                 resultSet.first();
             }
-            builder.setId(resultSet.getInt(ID_COL)).setCarName(resultSet.getString(CAR_NAME))
-                    .setCarNumber(resultSet.getString(CAR_NUMBER)).setCarCheckupEnd(resultSet.getDate(CHECKUP_END));
+            Date date = resultSet.getDate(CHECKUP_END);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date secDate = simpleDateFormat.parse(date.toString());
 
-        } catch (SQLException e) {
+            builder.setId(resultSet.getInt(ID_COL)).setCarName(resultSet.getString(CAR_NAME))
+                    .setCarNumber(resultSet.getString(CAR_NUMBER)).setCarCheckupEnd(secDate);
+
+        } catch (SQLException | ParseException e) {
             throw new DAOException(e);
         }
 

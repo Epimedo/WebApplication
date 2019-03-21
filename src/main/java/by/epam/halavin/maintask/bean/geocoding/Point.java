@@ -3,31 +3,66 @@ package by.epam.halavin.maintask.bean.geocoding;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Geographic point with its coordinates
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class Point implements Serializable {
     private double latitude;
     private double longitude;
 
+    /**
+     * Default constructor
+     */
     public Point() {
     }
 
+    /**
+     * Constructor - creates object with parameters
+     *
+     * @param latitude
+     * @param longitude
+     */
     public Point(final double latitude, final double longitude) {
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
 
+    /**
+     * Function to get field value{@link Point#latitude}
+     *
+     * @return - point's latitude
+     */
     public double getLatitude() {
         return latitude;
     }
 
+    /**
+     * Latitude determination {@link Point#latitude}
+     *
+     * @param latitude
+     */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * Function to get field value {@link Point#longitude}
+     *
+     * @return - point's longitude
+     */
     public double getLongitude() {
         return longitude;
     }
 
+    /**
+     * Longitude determination {@link Point#longitude}
+     *
+     * @param longitude
+     */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }

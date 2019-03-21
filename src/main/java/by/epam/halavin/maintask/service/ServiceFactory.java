@@ -17,6 +17,12 @@ import by.epam.halavin.maintask.service.validate.impl.PassengerValidator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Factory provides methods to get or create objects from service layer
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class ServiceFactory {
     private static ServiceFactory instance = new ServiceFactory();
     private final UserService passService = new PassengerService();

@@ -8,6 +8,12 @@ import by.epam.halavin.maintask.util.creators.UserCreator;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Passenger creator
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class PassengerCreator extends UserCreator {
 
     {
@@ -15,6 +21,13 @@ public class PassengerCreator extends UserCreator {
         user = new Passenger();
     }
 
+    /**
+     * Function gets http request nad return new initialized passenger object
+     *
+     * @param request
+     * @return
+     */
+    @Override
     public User create(HttpServletRequest request) {
         String name = request.getParameter(Attributes.NAME.getName());
         String surname = request.getParameter(Attributes.SURNAME.getName());

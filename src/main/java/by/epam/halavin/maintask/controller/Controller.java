@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class Controller extends HttpServlet {
     private static final String PARAMETER_COMMAND = "command";
     private final CommandProvider provider = new CommandProvider();

@@ -9,6 +9,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * GeoGenerator generate geographical coordinates for geographical point
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class GeoGenerator extends Thread {
     public static final double maxLatitude = 53.969541;
     public static final double minLatitude = 53.832991;
@@ -31,6 +37,12 @@ public class GeoGenerator extends Thread {
         }
     }
 
+    /**
+     * Function to get new point object with coordinates.
+     * Coordinates are generated randomly in the Minsk.
+     *
+     * @return - point with coordinates
+     */
     public Point generatePoint() {
         Point point = new Point();
 
@@ -42,6 +54,12 @@ public class GeoGenerator extends Thread {
         return point;
     }
 
+    /**
+     * Function gets collection of drivers and generate for each one.
+     * new geographical coordinate point.
+     *
+     * @param drivers
+     */
     public void generatePointsFor(Collection<Driver> drivers) {
         Iterator<Driver> iterator = drivers.iterator();
         Driver driver;

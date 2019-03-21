@@ -2,6 +2,12 @@ package by.epam.halavin.maintask.bean.user;
 
 import java.util.Objects;
 
+/**
+ * Passenger account object
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class Passenger extends User {
     private String status = "";
     private double discount;
@@ -11,26 +17,56 @@ public class Passenger extends User {
         super();
     }
 
+    /**
+     * Function to get field value {@link Passenger#status}
+     *
+     * @return - status
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Status determination {@link Passenger#status}
+     *
+     * @param status
+     */
     public void setStatus(String status) {
         this.status = status;
     }
 
+    /**
+     * Function to get field value {@link Passenger#discount}
+     *
+     * @return - discount
+     */
     public double getDiscount() {
         return discount;
     }
 
+    /**
+     * Discount determination {@link Passenger#discount}
+     *
+     * @param discount
+     */
     public void setDiscount(double discount) {
         this.discount = discount;
     }
 
+    /**
+     * Function to get field value {@link Passenger#bonus}
+     *
+     * @return - bonus
+     */
     public double getBonus() {
         return bonus;
     }
 
+    /**
+     * Bonus determination {@link Passenger#bonus}
+     *
+     * @param bonus
+     */
     public void setBonus(double bonus) {
         this.bonus = bonus;
     }

@@ -10,6 +10,12 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Repository keeps order dispatchers
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class DispatcherRepository {
     private static DispatcherRepository instance = new DispatcherRepository();
     private final Lock lock = new ReentrantLock();
@@ -19,10 +25,21 @@ public class DispatcherRepository {
     private DispatcherRepository() {
     }
 
+    /**
+     * Function to get repository reference
+     *
+     * @return
+     */
     public static DispatcherRepository getInstance() {
         return instance;
     }
 
+    /**
+     * Function to get driver's current order dispatcher, if it exists.
+     *
+     * @param driver
+     * @return
+     */
     public DefaultOrderDispatcher driverCheck(Driver driver) {
         lock.lock();
 
@@ -45,6 +62,12 @@ public class DispatcherRepository {
         return driverOrderDispatcher;
     }
 
+    /**
+     * Function to get passenger's order dispatcher, if it exists
+     *
+     * @param passenger
+     * @return
+     */
     public DefaultOrderDispatcher getOrderDispatcher(Passenger passenger) {
         passLock.lock();
         Passenger pass;
@@ -64,6 +87,11 @@ public class DispatcherRepository {
         return orderDispatcher;
     }
 
+    /**
+     * Remove from depository method for passenger's order dispatcher
+     *
+     * @param passenger
+     */
     public void removeOrderDispatcher(Passenger passenger) {
         lock.lock();
         Passenger pass;
@@ -82,6 +110,11 @@ public class DispatcherRepository {
         lock.unlock();
     }
 
+    /**
+     * Function to add order dispatcher to repository
+     *
+     * @param orderDispatcher
+     */
     public void addOrderDispatcher(DefaultOrderDispatcher orderDispatcher) {
         lock.lock();
 

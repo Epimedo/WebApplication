@@ -10,6 +10,12 @@ import by.epam.halavin.maintask.dao.user.DriverDAO;
 import by.epam.halavin.maintask.dao.user.PassengerDAO;
 import by.epam.halavin.maintask.dao.user.UserDAO;
 
+/**
+ * Factory provides static methods to get initialized objects from dao layer.
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class DAOFactory {
     private static DAOFactory instance = new DAOFactory();
     private final UserDAO passDAO = new PassengerDAO();

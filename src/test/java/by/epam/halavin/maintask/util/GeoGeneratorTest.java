@@ -36,6 +36,6 @@ public class GeoGeneratorTest {
         drivers.add(new Driver());
 
         geoGenerator.generatePointsFor(drivers);
-        Logger log = LogManager.getLogger();
+        System.out.println(drivers);
     }
 }

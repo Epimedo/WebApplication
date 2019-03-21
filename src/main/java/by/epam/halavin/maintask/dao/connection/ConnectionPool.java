@@ -32,6 +32,11 @@ public class ConnectionPool {
     private String user;
     private int count;
 
+    /**
+     * Connection pool constructor. Initializes pool depending on property {@link ConnectionPool#propPath}
+     *
+     * @throws DAOException
+     */
     private ConnectionPool() throws DAOException {
         Properties properties = new Properties();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -54,6 +59,12 @@ public class ConnectionPool {
         }
     }
 
+    /**
+     * Function to get connection pool reference
+     *
+     * @return
+     * @throws DAOException
+     */
     public static synchronized ConnectionPool getInstance() throws DAOException {
         try {
             if (instance == null) {
@@ -66,6 +77,12 @@ public class ConnectionPool {
         return instance;
     }
 
+    /**
+     * Function create connection to database
+     *
+     * @return connection
+     * @throws DAOException
+     */
     private Connection makeConnection() throws DAOException {
         Connection connection = null;
 
@@ -78,6 +95,13 @@ public class ConnectionPool {
         return connection;
     }
 
+    /**
+     * Thread-safe method to get free connection. If there isn't free connection function will be blocked and awaited
+     * for free connection.
+     *
+     * @return
+     * @throws DAOException
+     */
     public Connection getConnection() throws DAOException {
         lock.lock();
         Connection connection = null;
@@ -102,6 +126,12 @@ public class ConnectionPool {
         return connection;
     }
 
+    /**
+     * Thread-safe method to release connection which was taken before
+     *
+     * @param connection
+     * @throws DAOException
+     */
     public void releaseConnection(Connection connection) throws DAOException {
         lock.lock();
 

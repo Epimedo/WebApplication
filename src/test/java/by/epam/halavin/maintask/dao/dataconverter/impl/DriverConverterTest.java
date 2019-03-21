@@ -15,14 +15,18 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class DriverConverterTest {
     private static Driver expected = new Driver();
 
     @BeforeClass
-    public static void initDriver() {
+    public static void initDriver() throws ParseException {
         expected.setId(1);
         expected.setEmail("wolf@gmail.com");
         expected.setName("Антон");
@@ -36,6 +40,9 @@ public class DriverConverterTest {
         car.setId(1);
         car.setNumber("5647BN-7");
         car.setName("renault Logan");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        java.sql.Date date = new java.sql.Date(simpleDateFormat.parse("2020-08-11").getTime());
+        car.setDate(date);
         expected.setCar(car);
     }
 
@@ -55,7 +62,6 @@ public class DriverConverterTest {
         result = converter.convertFirstRow(resultSet);
 
         Assert.assertEquals(expected, result);
-        System.out.println(expected.equals(result));
     }
 
     @Test

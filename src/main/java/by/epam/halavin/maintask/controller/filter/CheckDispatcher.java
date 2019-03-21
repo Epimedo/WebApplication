@@ -5,6 +5,12 @@ import by.epam.halavin.maintask.controller.info.Urls;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The class determines the required verification object depending on the incoming address
+ *
+ * @author Ehor Halavin
+ * @version 1.0
+ */
 public class CheckDispatcher {
     private Map<String, Chekable> map = new HashMap<>();
 
