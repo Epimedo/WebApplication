@@ -9,6 +9,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class Passenger extends User {
+    private static final long serialVersionUID = 131;
     private String status = "";
     private double discount;
     private double bonus;

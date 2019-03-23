@@ -14,6 +14,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class Order implements Serializable {
+    private static final long serialVersionUID = 12;
     private int orderId;
     private Passenger passenger;
     private Driver driver;

@@ -12,6 +12,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class Driver extends User {
+    private static final long serialVersionUID = 132;
     private String status = "";
     private String carName = "";
     private String carNumber = "";

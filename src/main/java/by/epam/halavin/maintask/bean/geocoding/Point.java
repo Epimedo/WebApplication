@@ -10,6 +10,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class Point implements Serializable {
+    private static final long serialVersionUID = 14;
     private double latitude;
     private double longitude;
 

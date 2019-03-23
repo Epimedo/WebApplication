@@ -9,6 +9,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class Car implements Serializable {
+    private static final long serialVersionUID = 11;
     private int id;
     /**
      * Car's number

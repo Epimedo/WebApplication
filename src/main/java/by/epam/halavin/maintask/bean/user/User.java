@@ -10,6 +10,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class User implements Serializable {
+    private static final long serialVersionUID = 13;
     private int id;
     private String name = "";
     private String surname = "";
